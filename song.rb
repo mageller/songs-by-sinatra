@@ -1,7 +1,7 @@
 require 'dm-core'
 require 'dm-migrations'
 
-configure do
+configure :development do
   DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
 end
 
@@ -28,6 +28,7 @@ end
 
 # Create a new song
 get '/songs/new' do
+  halt(401, 'Not Authorized') unless session[:admin]
   @song = Song.new
   slim :new_song
 end
